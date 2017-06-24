@@ -5,6 +5,8 @@ import com.orbitz.consul.Consul;
 import com.orbitz.consul.NotRegisteredException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 
 /**
@@ -13,6 +15,8 @@ import org.springframework.scheduling.annotation.Scheduled;
  * Package com.moeller
  */
 public class MyExecutor{
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(MyExecutor.class);
 
   Consul consul;
   AgentClient agentClient;
@@ -44,6 +48,14 @@ public class MyExecutor{
       agentClient.pass(serviceId); // check in with Consul, serviceId required only.  client will prepend "service:" for service level checks.
     } catch (NotRegisteredException e) {
       e.printStackTrace();
+    }
+  }
+
+  public void cleanUp(){
+    LOGGER.info("Performing graceful shutdown");
+    if(agentClient.isRegistered(serviceId)){
+      agentClient.deregister(serviceId);
+      LOGGER.info("Successfully unregistered from Consul");
     }
   }
 }

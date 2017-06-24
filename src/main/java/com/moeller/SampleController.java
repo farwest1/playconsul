@@ -27,6 +27,9 @@ public class SampleController {
   @Autowired
   MyExecutor myEx;
 
+  @Autowired
+  ConsulConfig consulConfig;
+
 
   @RequestMapping("/")
   @ResponseBody
@@ -38,8 +41,11 @@ public class SampleController {
     SpringApplication.run(SampleController.class, args);
   }
 
-  @Bean
+  @Bean(destroyMethod = "cleanUp")
   public MyExecutor myExecutor() {
     return new MyExecutor();
   }
+
+  @Bean
+  ConsulConfig consulConfig(){return new ConsulConfig();}
 }
