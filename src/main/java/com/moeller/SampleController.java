@@ -24,12 +24,6 @@ import com.moeller.MyExecutor;
 @SpringBootApplication
 public class SampleController {
 
-  @Autowired
-  MyExecutor myEx;
-
-  @Autowired
-  ConsulConfig consulConfig;
-
 
   @RequestMapping("/")
   @ResponseBody
@@ -41,11 +35,14 @@ public class SampleController {
     SpringApplication.run(SampleController.class, args);
   }
 
-  @Bean(destroyMethod = "cleanUp")
+  @Bean(destroyMethod = "cleanUp", initMethod = "init")
   public MyExecutor myExecutor() {
     return new MyExecutor();
   }
 
-  @Bean
+  @Bean()
   ConsulConfig consulConfig(){return new ConsulConfig();}
+
+  @Bean
+  PlayConfiguration playConfiguration(){return new PlayConfiguration();}
 }

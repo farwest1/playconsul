@@ -1,0 +1,6 @@
+play:
+  service-id: 1
+  service-name: playconsul
+
+server:
+  port: 8090

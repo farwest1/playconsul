@@ -59,5 +59,4 @@ buildNumber.properties
 .gitignore
 .idea/
 playconsul.iml
-src/main/resources/
-src/test/
+

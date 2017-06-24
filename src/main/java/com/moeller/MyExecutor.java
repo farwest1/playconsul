@@ -7,46 +7,57 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by Bernd on 20.06.2017.
  *
  * Package com.moeller
  */
+
 public class MyExecutor{
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MyExecutor.class);
 
+
+
   Consul consul;
   AgentClient agentClient;
-  String serviceName = "MyService";
+
+
+  @Value("${play.service-name}")
+  private String serviceName;
+
+  @Value("${play.service-id}")
   String serviceId = "1";
 
+  @Value("${server.port}")
+  private String port;
 
-  public MyExecutor(){
-    consul = Consul.builder().build();
-    agentClient = consul.agentClient();
-
-
-    agentClient.register(8080, 3L, serviceName, serviceId); // registers with a TTL of 3 seconds
-
-    try {
-      agentClient.registerCheck("1", "CheckHello", new URL("http://localhost:8080/"), 3L);
-    }catch (MalformedURLException e){
-      e.printStackTrace();
-    }
-
-
-// Note that you need to continually check in before the TTL expires, otherwise your service's state will be marked as "critical".
-
-  }
 
   @Scheduled(fixedDelay=2000)
   public void triggerConsul (){
     try {
       agentClient.pass(serviceId); // check in with Consul, serviceId required only.  client will prepend "service:" for service level checks.
     } catch (NotRegisteredException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void init(){
+    consul = Consul.builder().build();
+    agentClient = consul.agentClient();
+
+
+    agentClient.register(Integer.parseInt(port), 3L, serviceName, serviceId); // registers with a TTL of 3 seconds
+
+
+    try {
+      agentClient.registerCheck("1", "CheckHello", new URL("http://localhost:" + port + "/"), 3L);
+    }catch (MalformedURLException e){
       e.printStackTrace();
     }
   }
