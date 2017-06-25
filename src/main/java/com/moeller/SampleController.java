@@ -40,7 +40,5 @@ public class SampleController {
     return new MyExecutor();
   }
 
-  @Bean()
-  ConsulConfig consulConfig(){return new ConsulConfig();}
 
 }

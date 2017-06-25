@@ -32,6 +32,9 @@ public class MyExecutor{
   @Autowired
   private PlayConfiguration playConfiguration;
 
+  @Autowired
+  private ConsulConfig consulConfig;
+
   private String serviceId;
 
 
