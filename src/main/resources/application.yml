@@ -4,3 +4,12 @@ play:
 
 server:
   port: 8090
+
+spring:
+  datasource:
+    url:  jdbc:postgresql://localhost:5432/db
+    username: db
+    password: db
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
