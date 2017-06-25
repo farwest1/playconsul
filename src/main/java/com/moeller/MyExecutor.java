@@ -22,20 +22,17 @@ public class MyExecutor{
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MyExecutor.class);
 
+  private Consul consul;
+  private AgentClient agentClient;
 
 
-  Consul consul;
-  AgentClient agentClient;
-
-
-  @Value("${play.service-name}")
-  private String serviceName;
-
-  @Value("${play.service-id}")
-  String serviceId = "1";
-
-  @Value("${server.port}")
+    @Value("${server.port}")
   private String port;
+
+  @Autowired
+  private PlayConfiguration playConfiguration;
+
+  private String serviceId;
 
 
   @Scheduled(fixedDelay=2000)
@@ -50,9 +47,10 @@ public class MyExecutor{
   private void init(){
     consul = Consul.builder().build();
     agentClient = consul.agentClient();
+    serviceId = playConfiguration.getServiceId();
 
 
-    agentClient.register(Integer.parseInt(port), 3L, serviceName, serviceId); // registers with a TTL of 3 seconds
+    agentClient.register(Integer.parseInt(port), 3L, playConfiguration.getServiceName(), serviceId); // registers with a TTL of 3 seconds
 
 
     try {

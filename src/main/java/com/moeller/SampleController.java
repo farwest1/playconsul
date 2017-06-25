@@ -43,6 +43,4 @@ public class SampleController {
   @Bean()
   ConsulConfig consulConfig(){return new ConsulConfig();}
 
-  @Bean
-  PlayConfiguration playConfiguration(){return new PlayConfiguration();}
 }

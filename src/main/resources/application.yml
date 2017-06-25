@@ -1,5 +1,5 @@
 play:
-  service-id: 1
+  service-id: 2
   service-name: playconsul
 
 server:
