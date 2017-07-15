@@ -65,12 +65,42 @@
     </dependencies>
   </dependencyManagement>
 
-
+<profiles>
+  <profile>
+    <id>docker</id>
   <build>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.21.0</version>
+        <configuration>
+          <dockerHost>http://192.168.2.111:2375</dockerHost>
+          <showLogs>true</showLogs>
+          <images>
+            <image>
+              <name>farwest/playconsul</name>
+              <build>
+                <dockerFileDir>${project.basedir}</dockerFileDir>
+              </build>
+            </image>
+          </images>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-  </build></project>
+
+  </build>
+  </profile>
+</profiles>
+</project>
